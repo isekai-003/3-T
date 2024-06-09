@@ -1,0 +1,51 @@
+---
+- name: Install Node.js
+  hosts: localhost
+  become: yes
+
+  tasks:
+    - name: Update the apt package index
+      apt:
+        update_cache: yes
+
+    - name: Install prerequisites
+      apt:
+        name: 
+          - curl
+          - software-properties-common
+        state: present
+
+    - name: Download Node.js setup script
+      get_url:
+        url: https://deb.nodesource.com/setup_16.x
+        dest: /tmp/nodesource_setup.sh
+        mode: '0755'
+
+    - name: Run Node.js setup script
+      command: /tmp/nodesource_setup.sh
+
+    - name: Install Node.js
+      apt:
+        name: nodejs
+        state: present
+
+    - name: Install build-essential
+      apt:
+        name: build-essential
+        state: present
+
+    - name: Verify Node.js installation
+      command: node --version
+      register: node_version
+
+    - name: Display Node.js version
+      debug:
+        msg: "Node.js version is {{ node_version.stdout }}"
+
+    - name: Verify npm installation
+      command: npm --version
+      register: npm_version
+
+    - name: Display npm version
+      debug:
+        msg: "npm version is {{ npm_version.stdout }}"
