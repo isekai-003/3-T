@@ -11,9 +11,12 @@ pipeline {
         nodejs 'node12'
         jdk 'java'
     }
-// environment {
-//     PATH = "/opt/apache-maven-3.9.2/bin:$PATH"
-// }
+environment {
+        ARTIFACTORY_URL = 'jfrog.url'
+        ARTIFACTORY_REPO = 'my-repo'
+        ARTIFACTORY_USER = credentials('username-id')
+        ARTIFACTORY_PASSWORD = credentials('JF_ACCESS_TOKEN')
+}
     stages {
         stage("Install Dependencies"){
             steps {
@@ -52,6 +55,21 @@ pipeline {
 }
     }
   }
+      stage('Publish to Artifactory') {
+            steps {
+                script {
+                
+                    withCredentials([usernamePassword(credentialsId: 'artifactory-credentials-id', usernameVariable: 'ARTIFACTORY_USER', passwordVariable: 'ARTIFACTORY_PASSWORD')]) {
+                        sh '''
+                        ./jfrog rt c --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASSWORD --interactive=false
+                        ./jfrog rt npmp --build-name=my-build --build-number=${BUILD_NUMBER}
+                        '''
+                    }
+                }
+            }
+        }
+    }
+
 //          stage("Jar Publish") {
 //         steps {
 //             script {
