@@ -62,8 +62,7 @@ environment {
                 
                     withCredentials([usernamePassword(credentialsId: 'artifactory-credentials-id', usernameVariable: 'ARTIFACTORY_USER', passwordVariable: 'ARTIFACTORY_PASSWORD')]) {
                         sh '''
-                          curl -fL https://getcli.jfrog.io | sh
-                          chmod +x jfrog
+                          npm install -g -unsafe-perm jfrog-cli-v2
                         ./jfrog rt c --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASSWORD --interactive=false
                         ./jfrog rt npmp --build-name=my-build --build-number=${BUILD_NUMBER}
                         '''
