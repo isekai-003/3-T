@@ -10,7 +10,7 @@ pipeline {
     tools {
         nodejs 'node12'
         jdk 'java'
-        jfrog 'jfrog-cli'
+        
     }
 environment {
         ARTIFACTORY_URL = 'jfrog.url'
