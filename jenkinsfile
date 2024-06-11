@@ -56,19 +56,19 @@ environment {
 //     }
 //   }
       
-        stage('Build') {
-            steps {
-                // Build the application
-                sh 'npm run build'
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         // Build the application
+        //         sh 'npm run build'
+        //     }
+        // }
 
-        stage('Package') {
-            steps {
-                // Package the application (example: create a tarball)
-                sh 'tar -czvf app.tar.gz build/'
-            }
-        }
+        // stage('Package') {
+        //     steps {
+        //         // Package the application (example: create a tarball)
+        //         sh 'tar -czvf app.tar.gz build/'
+        //     }
+        // }
 
         stage('Publish to Artifactory') {
             steps {
