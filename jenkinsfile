@@ -15,8 +15,7 @@ pipeline {
 environment {
         ARTIFACTORY_URL = 'jfrog.url'
         ARTIFACTORY_REPO = 'my-repo'
-        ARTIFACTORY_USER = credentials('username-id')
-        ARTIFACTORY_PASSWORD = credentials('JF_ACCESS_TOKEN')
+        ARTIFACTORY_CRED_ID = 'artifactory-credentials-id'
 }
     stages {
         stage("Install Dependencies"){
@@ -56,22 +55,39 @@ environment {
 // }
 //     }
 //   }
-      stage('Publish to Artifactory') {
+      
+        stage('Build') {
+            steps {
+                // Build the application
+                sh 'npm run build'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                // Package the application (example: create a tarball)
+                sh 'tar -czvf app.tar.gz build/'
+            }
+        }
+
+        stage('Publish to Artifactory') {
             steps {
                 script {
-                
-                    withCredentials([usernamePassword(credentialsId: 'artifactory-credentials-id', usernameVariable: 'ARTIFACTORY_USER', passwordVariable: 'ARTIFACTORY_PASSWORD')]) {
-                        sh '''
-                          npm install -g -unsafe-perm jfrog-cli-v2
-                        ./jfrog rt c --url=$ARTIFACTORY_URL --user=$ARTIFACTORY_USER --password=$ARTIFACTORY_PASSWORD --interactive=false
-                        ./jfrog rt npmp --build-name=my-build --build-number=${BUILD_NUMBER}
-                        '''
-                    }
+                    // Publish the artifact to JFrog Artifactory
+                    def server = Artifactory.server(ARTIFACTORY_CRED_ID)
+                    def uploadSpec = """{
+                        "files": [
+                            {
+                                "pattern": "app.tar.gz",
+                                "target": "${ARTIFACTORY_REPO}/"
+                            }
+                        ]
+                    }"""
+                    server.upload(uploadSpec)
                 }
             }
         }
     }
-}
 
 //          stage("Jar Publish") {
 //         steps {
