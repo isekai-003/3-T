@@ -60,7 +60,7 @@ environment {
         stage('Build') {
             steps {
                 // Build the application
-                sh 'npm build'
+                sh 'npm run build'
             }
         }
 
