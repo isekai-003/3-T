@@ -16,7 +16,7 @@ pipeline {
 environment {
         ARTIFACTORY_URL = 'jfrog.url'
         ARTIFACTORY_REPO = 'my-repo'
-        ARTIFACTORY_CRED_ID = 'artifactory-credentials-id'
+        ARTIFACTORY_CRED_ID = 'artifact-cred'
 }
     stages {
         stage("Install Dependencies"){
