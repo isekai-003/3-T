@@ -57,12 +57,12 @@ environment {
 //     }
 //   }
       
-        // stage('Build') {
-        //     steps {
-        //         // Build the application
-        //         sh 'npm run build'
-        //     }
-        // }
+        stage('Build') {
+            steps {
+                // Build the application
+                sh 'npm build'
+            }
+        }
 
         // stage('Package') {
         //     steps {
