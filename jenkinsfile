@@ -3,9 +3,9 @@
 // def version   = '2.1.4'
 pipeline {
     agent {
-        node {
-            label 'build-node'
-        }
+        // node {
+        //     label 'build-node'
+        // }
     }
     tools {
         nodejs 'node12'
